@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="TabView">
+        <attr name="tabv_title" format="string" />
+        <attr name="tabv_textSize" format="dimension" />
+        <attr name="tabv_colorMain" format="color" />
+        <attr name="tabv_colorSub" format="color" />
+        <attr name="tabv_padding" format="dimension" />
+        <attr name="tabv_paddingSide" format="dimension" />
+        <attr name="tabv_duration" format="integer" />
+    </declare-styleable>
+</resources>

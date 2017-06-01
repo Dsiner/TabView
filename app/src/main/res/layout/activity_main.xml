@@ -1,18 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.d.tabview.MainActivity">
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/tv_tips"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_margin="12dp"
+        android:text="onTab:1" />
 
-</android.support.constraint.ConstraintLayout>
+    <com.d.lib.tabview.TabView
+        android:id="@+id/tabv_tab"
+        android:layout_width="365dp"
+        android:layout_height="36dp"
+        app:tabv_colorMain="#4577B7"
+        app:tabv_colorSub="#ffffff"
+        app:tabv_duration="250"
+        app:tabv_padding="2px"
+        app:tabv_textSize="14dp"
+        app:tabv_title="TAB1;TAB2;TAB3;TAB4" />
+</LinearLayout>
