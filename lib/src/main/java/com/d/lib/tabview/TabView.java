@@ -12,6 +12,7 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.animation.LinearInterpolator;
 
 import com.nineoldandroids.animation.Animator;
@@ -35,9 +36,12 @@ public class TabView extends View {
 
     private int count;//总数量
     private float widthB;//单个标题宽度block
+    private float dX, dY;
     private int lastIndex;//上次的位置
     private int curIndex;//当前的位置
     private int dIndex = 0;//actionDown按压的位置
+    private int touchSlop;
+    private boolean isClickValid;//点击是否有效
 
     private float rectRadius;//圆角矩形弧度
     private String[] TITLES;//variables 标题
@@ -81,6 +85,8 @@ public class TabView extends View {
     }
 
     private void init(Context context) {
+        touchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
+
         count = TITLES != null ? TITLES.length : 0;
 
         rect = new Rect();
@@ -202,36 +208,40 @@ public class TabView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (count <= 0) {
+        if (count <= 0 || !(factor == 0 || factor == 1)) {
             return false;
         }
         float eX = event.getX();
         float eY = event.getY();
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                dX = eX;
+                dY = eY;
                 dIndex = (int) ((eX - widthP) / widthB);
                 dIndex = Math.max(dIndex, 0);
                 dIndex = Math.min(dIndex, count - 1);
-                return (factor == 0 || factor == 1) && dIndex != curIndex;
+                isClickValid = true;
+                return dIndex != curIndex;
             case MotionEvent.ACTION_MOVE:
-                return factor == 0 || factor == 1;
+                if (isClickValid && (Math.abs(eX - dX) > touchSlop || Math.abs(eY - dY) > touchSlop)) {
+                    isClickValid = false;
+                }
+                return isClickValid;
+            case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
-                if (eX < 0 || eX > width || eY < 0 || eY > height) {
-                    return true;
+                if (!isClickValid || eX < 0 || eX > width || eY < 0 || eY > height) {
+                    return false;
                 }
                 int uIndex = (int) ((eX - widthP) / widthB);
                 uIndex = Math.max(uIndex, 0);
                 uIndex = Math.min(uIndex, count - 1);
                 if (uIndex == dIndex) {
-                    if (factor == 0 || factor == 1) {
-                        lastIndex = curIndex;
-                        curIndex = dIndex;
-                        start();
-                    }
+                    lastIndex = curIndex;
+                    curIndex = dIndex;
+                    start();
+                    return true;
                 }
-                return true;
-            case MotionEvent.ACTION_CANCEL:
-                break;
+                return false;
         }
         return super.onTouchEvent(event);
     }

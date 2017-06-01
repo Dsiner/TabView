@@ -1,6 +1,10 @@
 # TabView for Android
 
 [![License](https://img.shields.io/badge/license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
+[ ![Download](https://api.bintray.com/packages/dsiner/maven/tabview/images/download.svg) ](https://bintray.com/dsiner/maven/tabview/_latestVersion)
+
+## Demo
+![](https://github.com/Dsiner/TabView/blob/master/screenshot/screenshot.gif)
 
 ## Setup
 Maven:
