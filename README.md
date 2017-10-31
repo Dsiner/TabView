@@ -4,7 +4,7 @@
 [ ![Download](https://api.bintray.com/packages/dsiner/maven/tabview/images/download.svg) ](https://bintray.com/dsiner/maven/tabview/_latestVersion)
 
 ## Demo
-![](https://github.com/Dsiner/TabView/blob/master/screenshot/screenshot.gif)
+![](https://https://github.com/Dsiner/Resouce/blob/master/lib/TabView/tabview.gif)
 
 ## Setup
 Maven:
