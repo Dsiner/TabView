@@ -1,6 +1,5 @@
 package com.d.lib.tabview;
 
-
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -17,7 +16,6 @@ import android.view.animation.LinearInterpolator;
 
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ValueAnimator;
-
 
 /**
  * TAB

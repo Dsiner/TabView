@@ -12,12 +12,12 @@ Maven:
 <dependency>
   <groupId>com.dsiner.lib</groupId>
   <artifactId>tabview</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
 </dependency>
 ```
 or Gradle:
 ```groovy
-compile 'com.dsiner.lib:tabview:1.0.0'
+compile 'com.dsiner.lib:tabview:1.0.1'
 ```
 
 
@@ -58,8 +58,8 @@ compile 'com.dsiner.lib:tabview:1.0.0'
 | tabv_title      | string | 标题(各个标题以";"分隔) |
 | tabv_textSize      | dimension      |   标题文字大小 |
 | tabv_colorMain | color      |    主颜色 |
-| tabv_tabv_colorSub | color      |    辅颜色 |
-| tabv_tabv_padding | dimension      |    边框宽度 |
+| tabv_colorSub | color      |    辅颜色 |
+| tabv_padding | dimension      |    边框宽度 |
 | tabv_paddingSide | dimension      |    两端预留间距 |
 | tabv_duration | integer      |    动画时长(ms) |
 
