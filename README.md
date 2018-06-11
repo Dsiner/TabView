@@ -1,7 +1,8 @@
 # TabView for Android
 
 [![License](https://img.shields.io/badge/license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
-[ ![Download](https://api.bintray.com/packages/dsiner/maven/tabview/images/download.svg) ](https://bintray.com/dsiner/maven/tabview/_latestVersion)
+[![API](https://img.shields.io/badge/API-9%2B-green.svg?style=flat)](https://android-arsenal.com/api?level=9)
+[![Download](https://api.bintray.com/packages/dsiner/maven/tabview/images/download.svg) ](https://bintray.com/dsiner/maven/tabview/_latestVersion)
 
 ## Demos
 ![](https://github.com/Dsiner/Resouce/blob/master/lib/TabView/tabview.gif)
