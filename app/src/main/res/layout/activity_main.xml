@@ -7,16 +7,58 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/tv_tips"
+        android:id="@+id/tv_tips0"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="12dp"
-        android:text="onTab:1" />
+        android:text="onTab: 1" />
 
     <com.d.lib.tabview.TabView
-        android:id="@+id/tabv_tab"
-        android:layout_width="365dp"
+        android:id="@+id/tabv_tab0"
+        android:layout_width="match_parent"
         android:layout_height="36dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        app:tabv_colorMain="#4577B7"
+        app:tabv_colorSub="#ffffff"
+        app:tabv_duration="250"
+        app:tabv_padding="2px"
+        app:tabv_textSize="14dp"
+        app:tabv_title="TAB1;TAB2" />
+
+    <TextView
+        android:id="@+id/tv_tips1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        android:text="onTab: 1" />
+
+    <com.d.lib.tabview.TabView
+        android:id="@+id/tabv_tab1"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        app:tabv_colorMain="#4577B7"
+        app:tabv_colorSub="#ffffff"
+        app:tabv_duration="250"
+        app:tabv_padding="2px"
+        app:tabv_textSize="14dp"
+        app:tabv_title="TAB1;TAB2;TAB3" />
+
+    <TextView
+        android:id="@+id/tv_tips2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        android:text="onTab: 1" />
+
+    <com.d.lib.tabview.TabView
+        android:id="@+id/tabv_tab2"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
         app:tabv_colorMain="#4577B7"
         app:tabv_colorSub="#ffffff"
         app:tabv_duration="250"
