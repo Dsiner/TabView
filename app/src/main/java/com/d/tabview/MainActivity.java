@@ -20,6 +20,6 @@ public class MainActivity extends AppCompatActivity implements TabView.OnTabSele
 
     @Override
     public void onTabSelected(int position) {
-        tvTips.setText("onTab:" + (position + 1));
+        tvTips.setText("onTab: " + (position + 1));
     }
 }

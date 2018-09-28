@@ -18,7 +18,7 @@ import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ValueAnimator;
 
 /**
- * TAB
+ * TabView
  * Created by D on 2017/3/8.
  */
 public class TabView extends View {
@@ -29,28 +29,28 @@ public class TabView extends View {
     private RectF rectF;
     private Paint paintA;
     private Paint paintB;
-    private Paint paintTitle;//仅用于普通文字的画笔
-    private Paint paintTitleCur;//仅用于当前选中文字的画笔
+    private Paint paintTitle; // 仅用于普通文字的画笔
+    private Paint paintTitleCur; // 仅用于当前选中文字的画笔
 
-    private int count;//总数量
-    private float widthB;//单个标题宽度block
+    private int count; // 总数量
+    private float widthB; // 单个标题宽度block
     private float dX, dY;
-    private int lastIndex;//上次的位置
-    private int curIndex;//当前的位置
-    private int dIndex = 0;//actionDown按压的位置
+    private int lastIndex; // 上次的位置
+    private int curIndex; // 当前的位置
+    private int dIndex = 0; // ActionDown按压的位置
     private int touchSlop;
-    private boolean isClickValid;//点击是否有效
+    private boolean isClickValid; // 点击是否有效
 
-    private float rectRadius;//圆角矩形弧度
-    private String[] TITLES;//variables 标题
-    private int textSize;//variables 标题文字大小
-    private int colorStroke, colorStrokeBlank, colorText, colorTextCur;//variables 颜色
-    private float padding;//variables 背景边框线宽度
-    private float widthP;//variables 两端预留间距side padding
-    private int duration;//variables 动画时长
+    private float rectRadius; // 圆角矩形弧度
+    private String[] TITLES; // Variables 标题
+    private int textSize; // Variables 标题文字大小
+    private int colorStroke, colorStrokeBlank, colorText, colorTextCur; // Variables 颜色
+    private float padding; // Variables 背景边框线宽度
+    private float widthP; // Variables 两端预留间距side padding
+    private int duration; // Variables 动画时长
 
     private ValueAnimator animation;
-    private float factor;//进度因子:0-1
+    private float factor; // 进度因子: 0-1
 
     private OnTabSelectedListener listener;
 
@@ -71,7 +71,7 @@ public class TabView extends View {
     private void initTypedArray(Context context, AttributeSet attrs) {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.TabView);
         String title = typedArray.getString(R.styleable.TabView_tabv_title);
-        TITLES = title != null ? title.split(";") : null;//TITLES maybe nullpointer
+        TITLES = title != null ? title.split(";") : null;
         textSize = (int) typedArray.getDimension(R.styleable.TabView_tabv_textSize,
                 TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 14, getResources().getDisplayMetrics()));
         colorStroke = colorText = typedArray.getColor(R.styleable.TabView_tabv_colorMain, Color.parseColor("#FF4081"));
@@ -111,7 +111,7 @@ public class TabView extends View {
         animation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                factor = (float) animation.getAnimatedValue();//更新进度因子
+                factor = (float) animation.getAnimatedValue();
                 invalidate();
             }
         });
@@ -124,7 +124,7 @@ public class TabView extends View {
             @Override
             public void onAnimationEnd(Animator animator) {
                 if (factor == 1 && listener != null) {
-                    //选中回调
+                    // 选中回调
                     listener.onTabSelected(curIndex);
                 }
             }
@@ -149,43 +149,45 @@ public class TabView extends View {
         }
         rect.set(0, 0, width, height);
         rectF.set(rect);
-        //step1-1:draw圆角矩形-边框线颜色
+        // Step 1-1: Draw圆角矩形-边框线颜色
         canvas.drawRoundRect(rectF, rectRadius, rectRadius, paintA);
 
         rect.set((int) padding, (int) padding, (int) (width - padding), (int) (height - padding));
         rectF.set(rect);
-        //step1-2:draw圆角矩形-背景颜色
+        // Step 1-2: Draw圆角矩形-背景颜色
         canvas.drawRoundRect(rectF, rectRadius, rectRadius, paintB);
-        //step1-3:带边框的背景绘制完毕
+        // Step 1-3: 带边框的背景绘制完毕
 
-        float start = widthP + widthB * lastIndex;//本次动画开始前的起始位置横坐标
-        float end = widthP + widthB * curIndex;//本次动画结束时的预计位置横坐标
-        float offsetX = start + (end - start) * factor;//通过属性动画因子，计算此瞬间滑块的其实横坐标
+        float start = widthP + widthB * lastIndex; // 本次动画开始前的起始位置横坐标
+        float end = widthP + widthB * curIndex; // 本次动画结束时的预计位置横坐标
+        float offsetX = start + (end - start) * factor; // 通过属性动画因子，计算此瞬间滑块的其实横坐标
 
-        //起始坐标offsetX=圆角矩形的left横坐标+预留间距withP
-        //left   offsetX - withP
-        //top    0
-        //right  offsetX + withB + withP
-        //bottom height
+        /*
+         * 起始坐标offsetX = 圆角矩形的left横坐标 + 预留间距withP
+         * left   offsetX - withP
+         * top    0
+         * right  offsetX + withB + withP
+         * bottom height
+         */
         rect.set((int) (offsetX - widthP), 0, (int) (offsetX + widthB + widthP), height);
         rectF.set(rect);
 
-        //step2:draw当前圆角矩形滑块
+        // Step 2: Draw当前圆角矩形滑块
         canvas.drawRoundRect(rectF, rectRadius, rectRadius, paintA);
 
-        int textheight = (int) getTextHeight(paintTitle);//获取标题的高度px
-        int starty = (height + textheight) / 2;//标题的绘制y坐标,即标题底部中心点y坐标
+        int textheight = (int) getTextHeight(paintTitle); // 获取标题的高度px
+        int starty = (height + textheight) / 2; // 标题的绘制y坐标,即标题底部中心点y坐标
 
-        //step3:遍历绘制所有标题
+        // Step 3: 遍历绘制所有标题
         for (int i = 0; i < count; i++) {
-            float startx = widthP + widthB * i + widthB / 2;//标题的绘制x坐标，即标题底部中心点x坐标
+            float startx = widthP + widthB * i + widthB / 2; // 标题的绘制x坐标，即标题底部中心点x坐标
             float cursor = (offsetX + widthB / 2) - widthP;
             if (cursor < 0) {
                 cursor = 0;
             }
             int offsetCur = (int) (cursor / widthB);
             if (offsetCur == i && (offsetCur == curIndex || offsetCur == lastIndex)) {
-                //当前滑块位置位于动画起始index或终止index时，文字高亮
+                // 当前滑块位置位于动画起始index或终止index时，文字高亮
                 canvas.drawText(TITLES[i], startx, starty, paintTitleCur);
             } else {
                 canvas.drawText(TITLES[i], startx, starty, paintTitle);
@@ -248,14 +250,14 @@ public class TabView extends View {
      * 获取字体高度
      */
     private float getTextHeight(Paint p) {
-        Paint.FontMetrics fm = p.getFontMetrics();// 获取字体高度
+        Paint.FontMetrics fm = p.getFontMetrics();
         return (float) ((Math.ceil(fm.descent - fm.top) + 2) / 2);
     }
 
     /**
      * 开始动画
      */
-    public void start() {
+    private void start() {
         stop();
         if (animation != null) {
             animation.start();
@@ -265,7 +267,7 @@ public class TabView extends View {
     /**
      * 停止动画
      */
-    public void stop() {
+    private void stop() {
         if (animation != null) {
             animation.cancel();
         }
@@ -282,18 +284,18 @@ public class TabView extends View {
     }
 
     /**
-     * 切换当前tab
+     * 切换当前Tab
      *
-     * @param index:  destination index
-     * @param withAn: with animation
+     * @param index    Index
+     * @param withAnim With animation
      */
-    public void selectTab(int index, boolean withAn) {
+    public void select(int index, boolean withAnim) {
         if (index == curIndex) {
             return;
         }
         lastIndex = curIndex;
         curIndex = index;
-        if (withAn) {
+        if (withAnim) {
             start();
         } else {
             factor = 1f;
@@ -302,13 +304,14 @@ public class TabView extends View {
     }
 
     public interface OnTabSelectedListener {
+
         /**
-         * @param index: index
+         * @param index Index
          */
         void onTabSelected(int index);
     }
 
-    public void setOnTabSelectedListener(OnTabSelectedListener listener) {
-        this.listener = listener;
+    public void setOnTabSelectedListener(OnTabSelectedListener l) {
+        this.listener = l;
     }
 }
