@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
             tabViews[finalI].setOnTabSelectedListener(new TabView.OnTabSelectedListener() {
                 @Override
                 public void onTabSelected(int index) {
-                    tvTips[finalI].setText("onTab: " + (index + 1));
+                    tvTips[finalI].setText("On tab: " + (index + 1));
                 }
             });
         }

@@ -22,37 +22,37 @@ import com.nineoldandroids.animation.ValueAnimator;
  * Created by D on 2017/3/8.
  */
 public class TabView extends View {
-    private int width;
-    private int height;
+    private int mWidth;
+    private int mHeight;
 
-    private Rect rect;
-    private RectF rectF;
-    private Paint paintA;
-    private Paint paintB;
-    private Paint paintTitle; // 仅用于普通文字的画笔
-    private Paint paintTitleCur; // 仅用于当前选中文字的画笔
+    private Rect mRect;
+    private RectF mRectF;
+    private Paint mPaintA;
+    private Paint mPaintB;
+    private Paint mPaintTitle; // 仅用于普通文字的画笔
+    private Paint mPaintTitleCur; // 仅用于当前选中文字的画笔
 
-    private int count; // 总数量
-    private float widthB; // 单个标题宽度block
-    private float dX, dY;
-    private int lastIndex; // 上次的位置
-    private int curIndex; // 当前的位置
-    private int dIndex = 0; // ActionDown按压的位置
-    private int touchSlop;
-    private boolean isClickValid; // 点击是否有效
+    private int mCount; // 总数量
+    private float mWidthB; // 单个标题宽度block
+    private float mTouchX, mTouchY;
+    private int mLastIndex; // 上次的位置
+    private int mCurIndex; // 当前的位置
+    private int mDownIndex = 0; // ActionDown按压的位置
+    private int mTouchSlop;
+    private boolean mIsDragging;
 
-    private float rectRadius; // 圆角矩形弧度
-    private String[] TITLES; // Variables 标题
-    private int textSize; // Variables 标题文字大小
-    private int colorStroke, colorStrokeBlank, colorText, colorTextCur; // Variables 颜色
-    private float padding; // Variables 背景边框线宽度
-    private float widthP; // Variables 两端预留间距side padding
-    private int duration; // Variables 动画时长
+    private float mRectRadius; // 圆角矩形弧度
+    private String[] mTitles; // Variables 标题
+    private int mTextSize; // Variables 标题文字大小
+    private int mColorStroke, mColorStrokeBlank, mColorText, mColorTextCur; // Variables 颜色
+    private float mPadding; // Variables 背景边框线宽度
+    private float mReservedPadding; // Variables 两端预留间距side padding
+    private int mDuration; // Variables 动画时长
 
-    private ValueAnimator animation;
-    private float factor; // 进度因子: 0-1
+    private ValueAnimator mAnimation;
+    private float mFactor; // 进度因子: 0-1
 
-    private OnTabSelectedListener listener;
+    private OnTabSelectedListener mOnTabSelectedListener;
 
     public TabView(Context context) {
         this(context, null);
@@ -71,51 +71,51 @@ public class TabView extends View {
     private void initTypedArray(Context context, AttributeSet attrs) {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.TabView);
         String title = typedArray.getString(R.styleable.TabView_tabv_title);
-        TITLES = title != null ? title.split(";") : null;
-        textSize = (int) typedArray.getDimension(R.styleable.TabView_tabv_textSize,
+        mTitles = title != null ? title.split(";") : null;
+        mTextSize = (int) typedArray.getDimension(R.styleable.TabView_tabv_textSize,
                 TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 14, getResources().getDisplayMetrics()));
-        colorStroke = colorText = typedArray.getColor(R.styleable.TabView_tabv_colorMain, Color.parseColor("#FF4081"));
-        colorStrokeBlank = colorTextCur = typedArray.getColor(R.styleable.TabView_tabv_colorSub, Color.parseColor("#ffffff"));
-        padding = (int) typedArray.getDimension(R.styleable.TabView_tabv_padding, 2);
-        widthP = (int) typedArray.getDimension(R.styleable.TabView_tabv_paddingSide, -1);
-        duration = typedArray.getInteger(R.styleable.TabView_tabv_duration, 250);
+        mColorStroke = mColorText = typedArray.getColor(R.styleable.TabView_tabv_colorMain, Color.parseColor("#FF4081"));
+        mColorStrokeBlank = mColorTextCur = typedArray.getColor(R.styleable.TabView_tabv_colorSub, Color.parseColor("#ffffff"));
+        mPadding = (int) typedArray.getDimension(R.styleable.TabView_tabv_padding, 2);
+        mReservedPadding = (int) typedArray.getDimension(R.styleable.TabView_tabv_paddingSide, -1);
+        mDuration = typedArray.getInteger(R.styleable.TabView_tabv_duration, 250);
         typedArray.recycle();
     }
 
     private void init(Context context) {
-        touchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
+        mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
 
-        count = TITLES != null ? TITLES.length : 0;
+        mCount = mTitles != null ? mTitles.length : 0;
 
-        rect = new Rect();
-        rectF = new RectF();
-        paintA = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paintA.setColor(colorStroke);
+        mRect = new Rect();
+        mRectF = new RectF();
+        mPaintA = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaintA.setColor(mColorStroke);
 
-        paintB = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paintB.setColor(colorStrokeBlank);
+        mPaintB = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaintB.setColor(mColorStrokeBlank);
 
-        paintTitle = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paintTitle.setTextSize(textSize);
-        paintTitle.setTextAlign(Paint.Align.CENTER);
-        paintTitle.setColor(colorText);
+        mPaintTitle = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaintTitle.setTextSize(mTextSize);
+        mPaintTitle.setTextAlign(Paint.Align.CENTER);
+        mPaintTitle.setColor(mColorText);
 
-        paintTitleCur = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paintTitleCur.setTextSize(textSize);
-        paintTitleCur.setTextAlign(Paint.Align.CENTER);
-        paintTitleCur.setColor(colorTextCur);
+        mPaintTitleCur = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaintTitleCur.setTextSize(mTextSize);
+        mPaintTitleCur.setTextAlign(Paint.Align.CENTER);
+        mPaintTitleCur.setColor(mColorTextCur);
 
-        animation = ValueAnimator.ofFloat(0f, 1f);
-        animation.setDuration(duration);
-        animation.setInterpolator(new LinearInterpolator());
-        animation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+        mAnimation = ValueAnimator.ofFloat(0f, 1f);
+        mAnimation.setDuration(mDuration);
+        mAnimation.setInterpolator(new LinearInterpolator());
+        mAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                factor = (float) animation.getAnimatedValue();
+                mFactor = (float) animation.getAnimatedValue();
                 invalidate();
             }
         });
-        animation.addListener(new Animator.AnimatorListener() {
+        mAnimation.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animator) {
 
@@ -123,9 +123,9 @@ public class TabView extends View {
 
             @Override
             public void onAnimationEnd(Animator animator) {
-                if (factor == 1 && listener != null) {
+                if (mFactor == 1 && mOnTabSelectedListener != null) {
                     // 选中回调
-                    listener.onTabSelected(curIndex);
+                    mOnTabSelectedListener.onTabSelected(mCurIndex);
                 }
             }
 
@@ -144,23 +144,23 @@ public class TabView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        if (count <= 0) {
+        if (mCount <= 0) {
             return;
         }
-        rect.set(0, 0, width, height);
-        rectF.set(rect);
+        mRect.set(0, 0, mWidth, mHeight);
+        mRectF.set(mRect);
         // Step 1-1: Draw圆角矩形-边框线颜色
-        canvas.drawRoundRect(rectF, rectRadius, rectRadius, paintA);
+        canvas.drawRoundRect(mRectF, mRectRadius, mRectRadius, mPaintA);
 
-        rect.set((int) padding, (int) padding, (int) (width - padding), (int) (height - padding));
-        rectF.set(rect);
+        mRect.set((int) mPadding, (int) mPadding, (int) (mWidth - mPadding), (int) (mHeight - mPadding));
+        mRectF.set(mRect);
         // Step 1-2: Draw圆角矩形-背景颜色
-        canvas.drawRoundRect(rectF, rectRadius, rectRadius, paintB);
+        canvas.drawRoundRect(mRectF, mRectRadius, mRectRadius, mPaintB);
         // Step 1-3: 带边框的背景绘制完毕
 
-        float start = widthP + widthB * lastIndex; // 本次动画开始前的起始位置横坐标
-        float end = widthP + widthB * curIndex; // 本次动画结束时的预计位置横坐标
-        float offsetX = start + (end - start) * factor; // 通过属性动画因子，计算此瞬间滑块的其实横坐标
+        float start = mReservedPadding + mWidthB * mLastIndex; // 本次动画开始前的起始位置横坐标
+        float end = mReservedPadding + mWidthB * mCurIndex; // 本次动画结束时的预计位置横坐标
+        float offsetX = start + (end - start) * mFactor; // 通过属性动画因子，计算此瞬间滑块的其实横坐标
 
         /*
          * 起始坐标offsetX = 圆角矩形的left横坐标 + 预留间距withP
@@ -169,28 +169,28 @@ public class TabView extends View {
          * right  offsetX + withB + withP
          * bottom height
          */
-        rect.set((int) (offsetX - widthP), 0, (int) (offsetX + widthB + widthP), height);
-        rectF.set(rect);
+        mRect.set((int) (offsetX - mReservedPadding), 0, (int) (offsetX + mWidthB + mReservedPadding), mHeight);
+        mRectF.set(mRect);
 
         // Step 2: Draw当前圆角矩形滑块
-        canvas.drawRoundRect(rectF, rectRadius, rectRadius, paintA);
+        canvas.drawRoundRect(mRectF, mRectRadius, mRectRadius, mPaintA);
 
-        int textheight = (int) getTextHeight(paintTitle); // 获取标题的高度px
-        int starty = (height + textheight) / 2; // 标题的绘制y坐标,即标题底部中心点y坐标
+        int textheight = (int) getTextHeight(mPaintTitle); // 获取标题的高度px
+        int starty = (mHeight + textheight) / 2; // 标题的绘制y坐标,即标题底部中心点y坐标
 
         // Step 3: 遍历绘制所有标题
-        for (int i = 0; i < count; i++) {
-            float startx = widthP + widthB * i + widthB / 2; // 标题的绘制x坐标，即标题底部中心点x坐标
-            float cursor = (offsetX + widthB / 2) - widthP;
+        for (int i = 0; i < mCount; i++) {
+            float startx = mReservedPadding + mWidthB * i + mWidthB / 2; // 标题的绘制x坐标，即标题底部中心点x坐标
+            float cursor = (offsetX + mWidthB / 2) - mReservedPadding;
             if (cursor < 0) {
                 cursor = 0;
             }
-            int offsetCur = (int) (cursor / widthB);
-            if (offsetCur == i && (offsetCur == curIndex || offsetCur == lastIndex)) {
+            int offsetCur = (int) (cursor / mWidthB);
+            if (offsetCur == i && (offsetCur == mCurIndex || offsetCur == mLastIndex)) {
                 // 当前滑块位置位于动画起始index或终止index时，文字高亮
-                canvas.drawText(TITLES[i], startx, starty, paintTitleCur);
+                canvas.drawText(mTitles[i], startx, starty, mPaintTitleCur);
             } else {
-                canvas.drawText(TITLES[i], startx, starty, paintTitle);
+                canvas.drawText(mTitles[i], startx, starty, mPaintTitle);
             }
         }
     }
@@ -198,52 +198,59 @@ public class TabView extends View {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        width = MeasureSpec.getSize(widthMeasureSpec);
-        height = MeasureSpec.getSize(heightMeasureSpec);
-        rectRadius = (height + 0.5f) / 2;
-        widthP = widthP == -1 ? (int) (rectRadius * 0.85f) : widthP;
-        widthB = (width - widthP * 2) / (count > 0 ? count : 1);
-        setMeasuredDimension(width, height);
+        mWidth = MeasureSpec.getSize(widthMeasureSpec);
+        mHeight = MeasureSpec.getSize(heightMeasureSpec);
+        mRectRadius = (mHeight + 0.5f) / 2;
+        mReservedPadding = mReservedPadding == -1 ? (int) (mRectRadius * 0.85f) : mReservedPadding;
+        mWidthB = (mWidth - mReservedPadding * 2) / (mCount > 0 ? mCount : 1);
+        setMeasuredDimension(mWidth, mHeight);
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if (count <= 0 || !(factor == 0 || factor == 1)) {
+    public boolean onTouchEvent(MotionEvent ev) {
+        if (mCount <= 0 || !(mFactor == 0 || mFactor == 1)) {
             return false;
         }
-        float eX = event.getX();
-        float eY = event.getY();
-        switch (event.getAction()) {
+        final int action = ev.getActionMasked();
+        final int actionIndex = ev.getActionIndex();
+        final float x = ev.getX();
+        final float y = ev.getY();
+        switch (action) {
             case MotionEvent.ACTION_DOWN:
-                dX = eX;
-                dY = eY;
-                dIndex = (int) ((eX - widthP) / widthB);
-                dIndex = Math.max(dIndex, 0);
-                dIndex = Math.min(dIndex, count - 1);
-                isClickValid = true;
-                return dIndex != curIndex;
+                mTouchX = x;
+                mTouchY = y;
+                mDownIndex = (int) ((x - mReservedPadding) / mWidthB);
+                mDownIndex = Math.max(mDownIndex, 0);
+                mDownIndex = Math.min(mDownIndex, mCount - 1);
+                mIsDragging = false;
+                return mDownIndex != mCurIndex;
+
             case MotionEvent.ACTION_MOVE:
-                if (isClickValid && (Math.abs(eX - dX) > touchSlop || Math.abs(eY - dY) > touchSlop)) {
-                    isClickValid = false;
+                if (!mIsDragging && (Math.abs(x - mTouchX) > mTouchSlop
+                        || Math.abs(y - mTouchY) > mTouchSlop)) {
+                    mIsDragging = true;
                 }
-                return isClickValid;
+                return !mIsDragging;
+
             case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
-                if (!isClickValid || eX < 0 || eX > width || eY < 0 || eY > height) {
+                if (mIsDragging
+                        || x < 0 || x > mWidth
+                        || y < 0 || y > mHeight) {
                     return false;
                 }
-                int uIndex = (int) ((eX - widthP) / widthB);
-                uIndex = Math.max(uIndex, 0);
-                uIndex = Math.min(uIndex, count - 1);
-                if (uIndex == dIndex) {
-                    lastIndex = curIndex;
-                    curIndex = dIndex;
-                    start();
+                int upIndex = (int) ((x - mReservedPadding) / mWidthB);
+                upIndex = Math.max(upIndex, 0);
+                upIndex = Math.min(upIndex, mCount - 1);
+                if (upIndex == mDownIndex) {
+                    mLastIndex = mCurIndex;
+                    mCurIndex = mDownIndex;
+                    startAnim();
                     return true;
                 }
                 return false;
         }
-        return super.onTouchEvent(event);
+        return super.onTouchEvent(ev);
     }
 
     /**
@@ -257,19 +264,19 @@ public class TabView extends View {
     /**
      * 开始动画
      */
-    private void start() {
-        stop();
-        if (animation != null) {
-            animation.start();
+    private void startAnim() {
+        stopAnim();
+        if (mAnimation != null) {
+            mAnimation.start();
         }
     }
 
     /**
      * 停止动画
      */
-    private void stop() {
-        if (animation != null) {
-            animation.cancel();
+    private void stopAnim() {
+        if (mAnimation != null) {
+            mAnimation.cancel();
         }
     }
 
@@ -277,9 +284,9 @@ public class TabView extends View {
         if (title == null || title.length <= 0) {
             return;
         }
-        TITLES = title;
-        count = TITLES.length;
-        widthB = (width - widthP * 2) / (count > 0 ? count : 1);
+        mTitles = title;
+        mCount = mTitles.length;
+        mWidthB = (mWidth - mReservedPadding * 2) / (mCount > 0 ? mCount : 1);
         postInvalidate();
     }
 
@@ -290,17 +297,21 @@ public class TabView extends View {
      * @param withAnim With animation
      */
     public void select(int index, boolean withAnim) {
-        if (index == curIndex) {
+        if (index == mCurIndex) {
             return;
         }
-        lastIndex = curIndex;
-        curIndex = index;
+        mLastIndex = mCurIndex;
+        mCurIndex = index;
         if (withAnim) {
-            start();
+            startAnim();
         } else {
-            factor = 1f;
+            mFactor = 1f;
             invalidate();
         }
+    }
+
+    public void setOnTabSelectedListener(OnTabSelectedListener l) {
+        this.mOnTabSelectedListener = l;
     }
 
     public interface OnTabSelectedListener {
@@ -309,9 +320,5 @@ public class TabView extends View {
          * @param index Index
          */
         void onTabSelected(int index);
-    }
-
-    public void setOnTabSelectedListener(OnTabSelectedListener l) {
-        this.listener = l;
     }
 }
