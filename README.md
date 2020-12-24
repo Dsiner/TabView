@@ -1,7 +1,7 @@
 # TabView for Android
 
 [![License](https://img.shields.io/badge/license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
-[![API](https://img.shields.io/badge/API-9%2B-green.svg?style=flat)](https://android-arsenal.com/api?level=9)
+[![API](https://img.shields.io/badge/API-9%2B-green.svg?style=flat)](https://android-arsenal.com/api?level=11)
 [![Download](https://api.bintray.com/packages/dsiner/maven/tabview/images/download.svg) ](https://bintray.com/dsiner/maven/tabview/_latestVersion)
 
 ## Demos
@@ -13,12 +13,12 @@ Maven:
 <dependency>
   <groupId>com.dsiner.lib</groupId>
   <artifactId>tabview</artifactId>
-  <version>1.0.1</version>
+  <version>1.0.2</version>
 </dependency>
 ```
 or Gradle:
 ```groovy
-compile 'com.dsiner.lib:tabview:1.0.1'
+compile 'com.dsiner.lib:tabview:1.0.2'
 ```
 
 

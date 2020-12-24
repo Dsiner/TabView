@@ -1,5 +1,7 @@
 package com.d.lib.tabview;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -13,9 +15,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.animation.LinearInterpolator;
-
-import com.nineoldandroids.animation.Animator;
-import com.nineoldandroids.animation.ValueAnimator;
 
 /**
  * TabView
@@ -215,7 +214,7 @@ public class TabView extends View {
         final int actionIndex = ev.getActionIndex();
         final float x = ev.getX();
         final float y = ev.getY();
-        switch (action) {
+        switch (ev.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 mTouchX = x;
                 mTouchY = y;

@@ -4,7 +4,7 @@ android {
     compileSdkVersion 27
 
     defaultConfig {
-        minSdkVersion 9
+        minSdkVersion 11
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
@@ -27,5 +27,4 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.nineoldandroids:library:2.4.0'
 }
